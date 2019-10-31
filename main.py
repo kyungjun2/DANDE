@@ -1,4 +1,5 @@
 import sys
+
 import encrypt
 
 if __name__ == '__main__':
@@ -23,11 +24,9 @@ if __name__ == '__main__':
             elif argv[idx] == '-decrypt':
                 idx += 1
                 print("다음 파일을 복호화 : {0}".format(argv[idx]))
-                #print("해당 기능은 제작중입니다.")
 
                 path = argv[idx]
                 mode = 2
-                #sys.exit(0)
             elif argv[idx] == '-key':
                 idx += 1
                 print("작업에 사용할 비밀키 = {0}".format(argv[idx]))
