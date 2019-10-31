@@ -54,14 +54,33 @@ class EncryptFile:
         else:
             return cipher.encrypt(data)
 
+    def encrypt_block(self, block, number, q):
+        if get_size(block) < 16:
+            return block
+
+        i = 0
+        encrypted_block = b''
+        length = len(block)
+
+        while i < length:
+            if i + 16 <= length:
+                encrypted_block += self.aes_encrypt(block[i:i+16])
+                encrypted_block += block[i+16:i+32]
+            else:
+                encrypted_block += block[i:]
+            i += 32
+
+        q.put({number: encrypted_block})
+        return {number: encrypted_block}
+
     def encrypt_file(self, path):
+        from multiprocessing import Process, Queue
+
         if validate_file(path) is False:
             print("파일이 존재하지 않음")
             kill()
 
         raw_file = read_file(path)
-        new_file = b''
-
         print("파일 크기 = {0}".format(format_size(get_size(raw_file))))
         if get_size(raw_file) < 16:
             print("파일이 너무 작음")
@@ -69,13 +88,29 @@ class EncryptFile:
 
         i = 0
         length = len(raw_file)
+        process_list = []
+        file_bytes = Queue()
+
         while i < length:
-            if i + 16 <= length:
-                new_file += self.aes_encrypt(raw_file[i:i+16])
-                new_file += raw_file[i+16:i+32]
-            else:
-                new_file += raw_file[i:]
-            i += 32
+            p = Process(target=self.encrypt_block, args=(raw_file[i:i+1600], i, file_bytes))
+            p.start()
+            process_list.append(p)
+
+            i += 1600
+
+        for p in process_list:
+            p.join()
+
+        new_file = b''
+        encrypted_files = {}
+
+        while file_bytes.empty() is not True:
+            encrypted_files.update(file_bytes.get())
+
+        i = 0
+        while i < length:
+            new_file = new_file + encrypted_files[i]
+            i += 1600
 
         f = open(path[:len(path.split("\\")[-1]) * -1] + path.split("\\")[-1] + '.encrypted', 'wb')
         f.write(new_file)
