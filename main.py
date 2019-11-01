@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     if len(argv) < 2:
         print("파라미터 부족")
-        sys.exit(0)
+        sys.exit(1)
 
     else:
         mode = -1
@@ -32,6 +32,9 @@ if __name__ == '__main__':
                 print("작업에 사용할 비밀키 = {0}".format(argv[idx]))
 
                 key = argv[idx]
+                if len(key) != 16:
+                    print("키 값의 길이가 알맞지 않음")
+                    sys.exit(1)
             else:
                 pass
 
