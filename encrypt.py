@@ -40,7 +40,8 @@ def kill():
 class EncryptFile:
     def __init__(self, key):
         self.key = key
-        self.block_size = 640000
+        self.block_size = 1024*int(1024/2)
+        self.maximum_process = 8
 
     def aes_encrypt(self, data):
         from Crypto.Cipher import AES
@@ -55,8 +56,9 @@ class EncryptFile:
         else:
             return cipher.encrypt(data)
 
-    def encrypt_block(self, block, number, q):
+    def encrypt_block(self, block, number, q, process_count):
         print("{}번 쓰레드 | 블록크기 {}".format(int(number/self.block_size), format_size(get_size(block))))
+        process_count.value += 1
 
         result = None
         if get_size(block) < 16:
@@ -77,11 +79,11 @@ class EncryptFile:
 
             result = {number: encrypted_block}
 
-        #q.put(result)
-        return result
+        q.put(result)
+        process_count.value += -1
 
     def encrypt_file(self, path):
-        from multiprocessing import Process, Queue
+        from multiprocessing import Process, Queue, Value
         import time
 
         if validate_file(path) is False:
@@ -95,21 +97,25 @@ class EncryptFile:
             kill()
 
         i = 0
+        count = 0
+        live_process = Value('i', 0)
         length = len(raw_file)
         process_list = []
         file_bytes = Queue()
 
         while i < length:
-            p = Process(target=self.encrypt_block, args=(raw_file[i:i+self.block_size], i, file_bytes, ))
+            p = Process(target=self.encrypt_block, args=(raw_file[i:i+self.block_size], i, file_bytes, live_process, ))
             p.start()
             process_list.append(p)
 
             i += self.block_size
-            time.sleep(0.5)
+            count += 1
+            while live_process.value > self.maximum_process:
+                time.sleep(0.2)
 
-        for p in process_list:
-            print(p.pid)
-            p.join()
+        while file_bytes.qsize() < count:
+            time.sleep(0.5)
+        print("암호화 완료! 결과 모으는중...")
 
         new_file = b''
         encrypted_files = {}
