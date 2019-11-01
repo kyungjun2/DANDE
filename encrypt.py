@@ -40,7 +40,7 @@ def kill():
 class EncryptFile:
     def __init__(self, key):
         self.key = key
-        self.block_size = 32000
+        self.block_size = 640000
 
     def aes_encrypt(self, data):
         from Crypto.Cipher import AES
@@ -77,8 +77,7 @@ class EncryptFile:
 
             result = {number: encrypted_block}
 
-        q.put(result)
-        print("{}번 쓰레드 작업 완료! {}".format(int(number/self.block_size), result))
+        #q.put(result)
         return result
 
     def encrypt_file(self, path):
