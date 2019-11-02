@@ -13,6 +13,7 @@ if __name__ == '__main__':
 
     else:
         mode = -1
+        max_threads = -1
         key = ''
         path = ''
 
@@ -37,18 +38,24 @@ if __name__ == '__main__':
                 if len(key) != 16:
                     print("키 값의 길이가 알맞지 않음")
                     sys.exit(1)
+            elif argv[idx] == '-threads':
+                idx += 1
+                print("최대 쓰레드 수 = {0}".format(argv[idx]))
+                max_threads = int(argv[idx])
             else:
                 pass
 
         if mode == -1 or len(key) == 0:
             print("파라미터 부족")
             sys.exit(1)
+        elif max_threads == -1:
+            max_threads = 8
 
         if mode == 1:
-            module = encrypt.EncryptFile(key=bytes(key, 'utf-8'))
+            module = encrypt.EncryptFile(key=bytes(key, 'utf-8'), max_threads=max_threads)
             module.encrypt_file(path)
         elif mode == 2:
-            module = encrypt.DecryptFile(key=bytes(key, 'utf-8'))
+            module = encrypt.DecryptFile(key=bytes(key, 'utf-8'), max_threads=max_threads)
             module.decrypt_file(path)
 
         print("걸린 시간 : {}초.".format((time.time() - start_time)))

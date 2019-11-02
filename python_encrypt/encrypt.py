@@ -38,10 +38,10 @@ def kill():
 
 
 class EncryptFile:
-    def __init__(self, key):
+    def __init__(self, key, max_threads):
         self.key = key
         self.block_size = 1024*int(1024/2)
-        self.maximum_process = 8
+        self.maximum_process = max_threads
 
     def aes_encrypt(self, data):
         from Crypto.Cipher import AES
@@ -141,10 +141,10 @@ class EncryptFile:
 
 
 class DecryptFile:
-    def __init__(self, key):
+    def __init__(self, key, max_threads):
         self.key = key
         self.block_size = 1024*int(1024/2)
-        self.maximum_process = 8
+        self.maximum_process = max_threads
 
     def aes_decrypt(self, data):
         from Crypto.Cipher import AES
