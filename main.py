@@ -1,9 +1,11 @@
 import sys
+import time
 
 from python_encrypt import encrypt
 
 if __name__ == '__main__':
     argv = sys.argv
+    start_time = time.time()
 
     if len(argv) < 2:
         print("파라미터 부족")
@@ -48,4 +50,6 @@ if __name__ == '__main__':
         elif mode == 2:
             module = encrypt.DecryptFile(key=bytes(key, 'utf-8'))
             module.decrypt_file(path)
+
+        print("걸린 시간 : {}초.".format((time.time() - start_time)))
         sys.exit(0)
