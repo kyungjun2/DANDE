@@ -1,6 +1,6 @@
 import sys
 
-import encrypt
+from python_encrypt import encrypt
 
 if __name__ == '__main__':
     argv = sys.argv
