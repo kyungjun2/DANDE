@@ -236,7 +236,7 @@ class DecryptFile:
             new_file = new_file + encrypted_files[i]
             i += self.block_size
 
-        f = open(path[:len(path.split("\\")[-1]) * -1] + path.split("\\")[-1][:path.split("\\")[-1].index(".encrypted")],
+        f = open(path[:len(path.split("\\")[-1]) * -1] + "decrypted." + path.split("\\")[-1][:path.split("\\")[-1].index(".encrypted")],
                  'wb')
         f.write(new_file)
         print("작업 성공 | {0}".format(f.name))
