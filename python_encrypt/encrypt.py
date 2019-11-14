@@ -84,15 +84,16 @@ class EncryptFile:
     def encrypt_file(self, path):
         from multiprocessing import Process, Queue, Value
         import time
+        import psutil
 
         if validate_file(path) is False:
-            print("파일이 존재하지 않음")
+            print(path + " | 파일이 존재하지 않음")
             kill()
 
         raw_file = read_file(path)
-        print("파일 크기 = {0}".format(format_size(get_size(raw_file))))
+        print(path + " | 파일 크기 = {0}".format(format_size(get_size(raw_file))))
         if get_size(raw_file) < 16:
-            print("파일이 너무 작음")
+            print(path + " | 파일이 너무 작음")
             kill()
 
         i = 0
@@ -112,15 +113,15 @@ class EncryptFile:
             i += self.block_size
 
             printed = False
-            while live_process.value > self.maximum_process:
+            while live_process.value > self.maximum_process or psutil.cpu_percent() > 85:
                 time.sleep(0.2)
                 if printed is False:
-                    print("%0.2f" % (((count - 1) / maximum_thread) * 100) + "%")
+                    print(path + " | %0.2f" % (((count - 1) / maximum_thread) * 100) + "%")
                     printed = True
 
         while file_bytes.qsize() < count:
             time.sleep(0.5)
-        print("암호화 완료! 결과 모으는중...")
+        print(path + " | 암호화 완료! 결과 모으는중...")
 
         new_file = b''
         encrypted_files = {}
@@ -186,15 +187,16 @@ class DecryptFile:
     def decrypt_file(self, path):
         from multiprocessing import Process, Queue, Value
         import time
+        import psutil
 
         if validate_file(path) is False:
-            print("파일이 존재하지 않음")
+            print(path + " | 파일이 존재하지 않음")
             kill()
 
         raw_file = read_file(path)
-        print("파일 크기 = {0}".format(format_size(get_size(raw_file))))
+        print(path + " | 파일 크기 = {0}".format(format_size(get_size(raw_file))))
         if get_size(raw_file) < 16:
-            print("파일이 너무 작음")
+            print(path + " | 파일이 너무 작음")
             kill()
 
         i = 0
@@ -215,15 +217,15 @@ class DecryptFile:
             count += 1
 
             printed = False
-            while live_process.value > self.maximum_process:
+            while live_process.value > self.maximum_process or psutil.cpu_percent() > 85:
                 time.sleep(0.2)
                 if printed is False:
-                    print("%0.2f" % (((count - 1) / maximum_thread) * 100) + "%")
+                    print(path + " | %0.2f" % (((count - 1) / maximum_thread) * 100) + "%")
                     printed = True
 
         while file_bytes.qsize() < count:
             time.sleep(0.5)
-        print("복호화 완료! 결과 모으는중...")
+        print(path + " | 복호화 완료! 결과 모으는중...")
 
         new_file = b''
         encrypted_files = {}
