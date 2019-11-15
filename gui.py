@@ -26,7 +26,7 @@ def encrypt_button_call():
         file = open(abspath + "\\settings.json", "rb")
         setting = json.load(file)
         key = setting['key']
-    except (KeyError, FileNotFoundError) as e:
+    except (KeyError, FileNotFoundError, ValueError) as e:
         key = None
 
     messagebox.showinfo(title="Message box", message="Encryption Selected!")
@@ -48,7 +48,7 @@ def decrypt_button_call():
         file = open(abspath + "\\settings.json", "rb")
         setting = json.load(file)
         key = setting['key']
-    except (KeyError, FileNotFoundError) as e:
+    except (KeyError, FileNotFoundError, ValueError) as e:
         key = None
 
     messagebox.showinfo(title="Message box", message="Decryption Selected!")

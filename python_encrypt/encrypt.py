@@ -32,11 +32,6 @@ def format_size(size):
         return "%.02fGB" % (size / (1024 ** 3))
 
 
-def kill():
-    import sys
-    sys.exit(-1)
-
-
 class EncryptFile:
     def __init__(self, key, max_threads):
         self.key = key
@@ -49,8 +44,7 @@ class EncryptFile:
 
         if len(data) % 16 != 0:
             print("데이터 블록의 크기가 잘못됨")
-            import sys
-            sys.exit(-1)
+            return data
         elif len(data) == 0:
             return None
         else:
@@ -88,13 +82,13 @@ class EncryptFile:
 
         if validate_file(path) is False:
             print(path + " | 파일이 존재하지 않음")
-            kill()
+            return
 
         raw_file = read_file(path)
         print(path + " | 파일 크기 = {0}".format(format_size(get_size(raw_file))))
         if get_size(raw_file) < 16:
             print(path + " | 파일이 너무 작음")
-            kill()
+            return
 
         i = 0
         count = 0
@@ -153,8 +147,7 @@ class DecryptFile:
 
         if len(data) % 16 != 0:
             print("데이터 블록의 크기가 잘못됨")
-            import sys
-            sys.exit(-1)
+            return data
         elif len(data) == 0:
             return None
         else:
@@ -191,13 +184,13 @@ class DecryptFile:
 
         if validate_file(path) is False:
             print(path + " | 파일이 존재하지 않음")
-            kill()
+            return
 
         raw_file = read_file(path)
         print(path + " | 파일 크기 = {0}".format(format_size(get_size(raw_file))))
         if get_size(raw_file) < 16:
             print(path + " | 파일이 너무 작음")
-            kill()
+            return
 
         i = 0
         count = 0

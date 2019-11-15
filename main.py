@@ -1,11 +1,13 @@
-import multiprocessing
+import re
 import sys
 import time
+from multiprocessing import freeze_support, cpu_count
 
 from python_encrypt import encrypt
 
-if __name__ == '__main__':
-    multiprocessing.freeze_support()
+
+def main():
+    freeze_support()
     argv = sys.argv
     start_time = time.time()
 
@@ -51,12 +53,12 @@ if __name__ == '__main__':
             print("파라미터 부족")
             sys.exit(1)
         if max_threads == -1:
-            import multiprocessing
-            max_threads = multiprocessing.cpu_count()
+            max_threads = cpu_count()
         if mode == 2 and path.count(".encrypted") == 0:
             print("암호화된 파일이 아님")
             sys.exit(-1)
 
+        path = re.sub(re.compile("/"), r"\\", path)
 
         if mode == 1:
             module = encrypt.EncryptFile(key=bytes(key, 'utf-8'), max_threads=max_threads)
@@ -66,4 +68,9 @@ if __name__ == '__main__':
             module.decrypt_file(path)
 
         print("걸린 시간 : {}초.".format(format(time.time() - start_time, '.2f')))
-        sys.exit(0)
+
+
+if __name__ == '__main__':
+    main()
+    input("아무 키나 눌러서 계속하세요")
+    sys.exit(0)

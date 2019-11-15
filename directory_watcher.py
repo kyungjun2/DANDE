@@ -2,7 +2,7 @@ import json
 import tkinter.messagebox
 from ctypes import c_bool
 from multiprocessing import Process, Value, freeze_support
-from tkinter import *
+from tkinter import Tk, Frame
 
 from look_for_changes import changes
 from python_encrypt import encrypt
@@ -26,22 +26,21 @@ def when_changes_occur(results, file_path, key):
     for p in process_list:
         p.join()
 
+
 win = Tk()
 win.title("message box")
 
-
 base_frm = Frame(win)
 base_frm.pack()
-
 
 win.geometry("300x300+0+0")
 win.resizable(False, False)
 
 
-def Msgbox1():
+def start_button_call():
     tkinter.messagebox.showinfo(title="Message box", message="Start Selected!")
 
-    #여기에 (시작)버튼 프로그래밍
+    # 여기에 (시작)버튼 프로그래밍
     global run, watcher_process
     try:
         file = open("settings.json", "rb")
@@ -50,7 +49,7 @@ def Msgbox1():
         if path[-1] is not "\\":
             path = path + '\\'
         key = setting['key']
-    except (KeyError, FileNotFoundError) as e:
+    except (KeyError, FileNotFoundError, ValueError) as e:
         path = None
         key = None
 
@@ -62,26 +61,25 @@ def Msgbox1():
         watcher_process.start()
 
 
-def Msgbox2():
+def stop_button_call():
     tkinter.messagebox.showinfo(title="Message box", message="Stop Selected!")
 
     global run
-    #여기에 (중지)버튼 프로그래밍
+    # 여기에 (중지)버튼 프로그래밍
     run.value = False
     try:
         watcher_process.join()
     except:
         pass
-    
 
 
-btn1 = tkinter.Button(win, text = "Start", command=Msgbox1)
-btn1.pack(padx = "50", pady = '10',)
+btn1 = tkinter.Button(win, text="Start", command=start_button_call)
+btn1.pack(padx="50", pady='10', )
 
-btn2 = tkinter.Button(win, text = "Stop", command=Msgbox2)
-btn2.pack(padx = "50", pady = '10')
+btn2 = tkinter.Button(win, text="Stop", command=stop_button_call)
+btn2.pack(padx="50", pady='10')
 
-btn1.place(x=20, y=70, width= 80, height=70)
+btn1.place(x=20, y=70, width=80, height=70)
 
 btn2.place(x=200, y=70, width=80, height=70)
 
