@@ -17,10 +17,9 @@ Encrypt_My_FIles
 ###### (암호화 키는 16글자여야 함)
 
 ## windows용 빌드
-    dist 폴더에 있는 main.exe로 파일 암호화 / 복호화
-    
-    dist 폴더에 있는 test_gui.exe로 폴더에 생성/변경되는 모든 파일을 암호화
-###### test_gui.exe를 사용하려면 settings.json을 변경해야 함!
+    dist 폴더에 있는 모든 파일이 필요
+    gui.exe로 실행
+###### settings.json을 변경해야 함! (How_To_Use.txt 참고)
 
 ## 필요한 라이브러리
 - [pycryptodome](https://pypi.org/project/pycryptodome/)
