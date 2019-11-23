@@ -34,8 +34,9 @@ def encrypt_button_call():
 
     if file_path is not None and key is not None:
         filepath = abspath + "\\main.exe"
-        params = "-encrypt \"{0}\" -key {1} -threads {2}".format(str(file_path), str(key), str(16))
-        os.system(filepath + " " + params)
+        params = [filepath, "-encrypt", "{0}".format(str(file_path)), "-key", "{0}".format(str(key))]
+
+        subprocess.Popen(params)
         messagebox.showinfo(title="INFO", message="암호화 완료")
 
         file_path = None  # 초기화
@@ -56,8 +57,9 @@ def decrypt_button_call():
 
     if file_path is not None and key is not None:
         filepath = abspath + "\\main.exe"
-        params = "-decrypt \"{0}\" -key {1} -threads {2}".format(str(file_path), str(key), str(16))
-        os.system(filepath + " " + params)
+        params = [filepath, "-decrypt", "{0}".format(str(file_path)), "-key", "{0}".format(str(key))]
+
+        subprocess.Popen(params)
         messagebox.showinfo(title="INFO", message="복호화 완료")
 
         file_path = None  # 초기화
