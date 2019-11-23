@@ -20,6 +20,7 @@ Encrypt_My_FIles
     dist 폴더에 있는 모든 파일이 필요
     gui.exe로 실행
 ###### settings.json을 변경해야 함! (How_To_Use.txt 참고)
+###### 런타임 에러 발생시 다음 배포판을 설치해 보세요(https://www.microsoft.com/ko-kr/download/details.aspx?id=53840)
 
 ## 필요한 라이브러리
 - [pycryptodome](https://pypi.org/project/pycryptodome/)
