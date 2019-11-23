@@ -114,7 +114,7 @@ if __name__ == "__main__":
     watchdirectory_button.pack(padx="50", pady="10")
 
     encrypt_button.place(x=5, y=70, width=145, height=70)
-    watchdirectory_button.place(x=5, y=140, width=145, height=70)
+    watchdirectory_button.place(x=5, y=140, width=290, height=70)
     decrypt_button.place(x=150, y=70, width=145, height=70)
     selectfile_button.place(x=5, y=25, width=290, height=40)
     kill_button.place(x=5, y=255, width=290, height=40)
