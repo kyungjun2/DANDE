@@ -40,7 +40,7 @@ def main():
                 key = argv[idx]
                 if len(key) != 16:
                     print("키 값의 길이가 알맞지 않음")
-                    sys.exit(1)
+                    return
             elif argv[idx] == '-threads':
                 idx += 1
                 print("최대 쓰레드 수 = {0}".format(argv[idx]))
@@ -53,7 +53,7 @@ def main():
             return
         if max_threads == -1:
             max_threads = cpu_count()
-        if mode == 2 and path.count(".encrypted") == 0:
+        if mode == 2 and path.split(".")[-1] != "encrypted":
             print("암호화된 파일이 아님")
             return
 
@@ -71,5 +71,5 @@ if __name__ == '__main__':
     start_time = time.time()
     main()
     print("걸린 시간 : {}초.".format(format(time.time() - start_time, '.2f')))
-    input("아무 키나 눌러서 계속하세요")
+    input("엔터키를 눌러서 계속하세요")
     sys.exit(0)

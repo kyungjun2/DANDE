@@ -37,8 +37,6 @@ def encrypt_button_call():
         params = [filepath, "-encrypt", "{0}".format(str(file_path)), "-key", "{0}".format(str(key))]
 
         subprocess.Popen(params)
-        messagebox.showinfo(title="INFO", message="암호화 완료")
-
         file_path = None  # 초기화
     else:
         messagebox.showinfo(title="Message box", message="파일 선택 or settings.json 에서 키값 설정")
@@ -60,8 +58,6 @@ def decrypt_button_call():
         params = [filepath, "-decrypt", "{0}".format(str(file_path)), "-key", "{0}".format(str(key))]
 
         subprocess.Popen(params)
-        messagebox.showinfo(title="INFO", message="복호화 완료")
-
         file_path = None  # 초기화
     else:
         messagebox.showinfo(title="Message box", message="파일 선택 or settings.json 에서 키값 설정")
